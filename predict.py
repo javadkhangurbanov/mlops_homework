@@ -1,14 +1,22 @@
-import argparse, joblib, pandas as pd
+import os, argparse, joblib, pandas as pd
+
+def load_any(path):
+    ext = os.path.splitext(path)[1].lower()
+    if ext == ".csv":
+        return pd.read_csv(path)
+    if ext == ".parquet":
+        return pd.read_parquet(path)
+    raise ValueError(f"Unsupported file format: {ext}")
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--model", required=True, help="Path to saved joblib model")
-    ap.add_argument("--data",  required=True, help="CSV without target (or target ignored)")
+    ap.add_argument("--model", required=True)
+    ap.add_argument("--data",  required=True)
     ap.add_argument("--out",   default="predictions.csv")
     args = ap.parse_args()
 
     pipe = joblib.load(args.model)
-    df = pd.read_csv(args.data)
+    df = load_any(args.data)
     proba = pipe.predict_proba(df)[:, 1]
     pred = (proba >= 0.5).astype(int)
 
