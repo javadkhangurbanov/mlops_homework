@@ -33,15 +33,15 @@ def main():
     pipe = Pipeline([("preprocessor", pre), ("model", xgb)])
 
     param_distributions = {
-        "model__n_estimators":      np.arange(200, 900, 100),
-        "model__learning_rate":     np.linspace(0.01, 0.2, 10),
-        "model__max_depth":         [3, 4, 5, 6, 7],
-        "model__min_child_weight":  [1, 2, 3, 5],
-        "model__subsample":         np.linspace(0.6, 1.0, 5),
-        "model__colsample_bytree":  np.linspace(0.6, 1.0, 5),
-        "model__gamma":             [0, 1, 2],
-        "model__reg_alpha":         [0, 1e-3, 1e-2, 1e-1, 1],
-        "model__reg_lambda":        [0.5, 1, 2, 5, 10],
+        "model__n_estimators": np.arange(200, 900, 100),
+        "model__learning_rate": np.linspace(0.01, 0.2, 10),
+        "model__max_depth": [3, 4, 5, 6, 7],
+        "model__min_child_weight": [1, 2, 3, 5],
+        "model__subsample": np.linspace(0.6, 1.0, 5),
+        "model__colsample_bytree": np.linspace(0.6, 1.0, 5),
+        "model__gamma": [0, 1, 2],
+        "model__reg_alpha": [0, 1e-3, 1e-2, 1e-1, 1],
+        "model__reg_lambda": [0.5, 1, 2, 5, 10],
     }
 
     cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
@@ -65,8 +65,7 @@ def main():
         "holdout_roc_auc": float(roc_auc_score(y_te, proba)),
         "holdout_pr_auc": float(average_precision_score(y_te, proba)),
         "best_params": {
-            k: (float(v) if hasattr(v, "__float__") else v)
-            for k, v in search.best_params_.items()
+            k: (float(v) if hasattr(v, "__float__") else v) for k, v in search.best_params_.items()
         },
     }
 
@@ -76,6 +75,7 @@ def main():
     save_json(metrics_path, metrics)
     print(f"Saved model → {model_path}")
     print(f"Saved metrics → {metrics_path}")
+
 
 if __name__ == "__main__":
     main()

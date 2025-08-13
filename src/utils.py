@@ -17,6 +17,7 @@ def load_xy(file_path: str, target_col: str = "target"):
     X = df.drop(columns=[target_col])
     return X, y
 
+
 def save_json(path: str, obj: dict):
     with open(path, "w", encoding="utf-8") as f:
         json.dump(obj, f, indent=2)
