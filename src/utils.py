@@ -1,6 +1,8 @@
 import json
-import pandas as pd
 import os
+
+import pandas as pd
+
 
 def load_xy(file_path: str, target_col: str = "target"):
     ext = os.path.splitext(file_path)[1].lower()

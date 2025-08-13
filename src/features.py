@@ -1,13 +1,14 @@
 # src/features.py
 from __future__ import annotations
+
 import numpy as np
 import pandas as pd
+from category_encoders import CatBoostEncoder
 from sklearn.base import BaseEstimator, TransformerMixin
-from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
+from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder
-from category_encoders import CatBoostEncoder
 
 
 class FeatureBuilder(BaseEstimator, TransformerMixin):
@@ -69,14 +70,27 @@ class FeatureBuilder(BaseEstimator, TransformerMixin):
         # --- dev_num numeric + binning (9 means 9+) ---
         df["dev_num"] = pd.to_numeric(df["dev_num"], errors="coerce")
         df["dev_num_bin"] = df["dev_num"].apply(
-            lambda x: np.nan if pd.isna(x) else (int(x) if int(x) <= self.cap_dev_num_at - 1 else self.cap_dev_num_at)
+            lambda x: np.nan if pd.isna(x) else (int(x) if int(x) <= self.cap_dev_num_at - 1
+                                                 else self.cap_dev_num_at)
         )
 
         # --- dual_smart_combo ('0_0','0_1','1_0','1_1') ---
         # Coerce to int first to avoid 'True'/'False' strings
-        df["is_dualsim"] = pd.to_numeric(df["is_dualsim"], errors="coerce").fillna(0).astype(int)
-        df["is_smartphone"] = pd.to_numeric(df["is_smartphone"], errors="coerce").fillna(0).astype(int)
-        df["dual_smart_combo"] = df["is_dualsim"].astype(str) + "_" + df["is_smartphone"].astype(str)
+        df["is_dualsim"] = (
+            pd.to_numeric(df["is_dualsim"], errors="coerce")
+            .fillna(0)
+            .astype(int)
+        )
+        df["is_smartphone"] = (
+            pd.to_numeric(df["is_smartphone"], errors="coerce")
+            .fillna(0)
+            .astype(int)
+        )
+        df["dual_smart_combo"] = (
+            df["is_dualsim"].astype(str)
+            + "_"
+            + df["is_smartphone"].astype(str)
+        )
 
         # --- age_dev_cat (years) ---
         if self.make_age_dev_cat and "age_dev" in df.columns:
@@ -90,7 +104,10 @@ class FeatureBuilder(BaseEstimator, TransformerMixin):
         dev_man_clean = (
             df["dev_man"].astype(str).str.strip().str.replace(r"\s+", " ", regex=True).str.upper()
         )
-        df["dev_man_grouped"] = dev_man_clean.where(~dev_man_clean.isin(self._rare_dev_man_), "Other")
+        df["dev_man_grouped"] = (
+            dev_man_clean
+            .where(~dev_man_clean.isin(self._rare_dev_man_), "Other")
+        )
 
         # --- device_os_name rare grouping (optional) ---
         if self._rare_os_:

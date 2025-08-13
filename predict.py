@@ -1,4 +1,9 @@
-import os, argparse, joblib, pandas as pd
+import argparse
+import os
+
+import joblib
+import pandas as pd
+
 
 def load_any(path):
     ext = os.path.splitext(path)[1].lower()

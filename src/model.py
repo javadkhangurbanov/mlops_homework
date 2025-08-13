@@ -1,5 +1,6 @@
 from xgboost import XGBClassifier
 
+
 def make_model(scale_pos_weight: float = 1.0) -> XGBClassifier:
     return XGBClassifier(
         objective="binary:logistic",
