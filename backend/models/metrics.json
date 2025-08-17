@@ -1,0 +1,16 @@
+{
+  "cv_roc_auc": 0.65214078125,
+  "holdout_roc_auc": 0.6625500000000001,
+  "holdout_pr_auc": 0.6338621768881949,
+  "best_params": {
+    "model__subsample": 0.9,
+    "model__reg_lambda": 5.0,
+    "model__reg_alpha": 0.0,
+    "model__n_estimators": 200.0,
+    "model__min_child_weight": 3.0,
+    "model__max_depth": 4.0,
+    "model__learning_rate": 0.1366666666666667,
+    "model__gamma": 0.0,
+    "model__colsample_bytree": 0.6
+  }
+}

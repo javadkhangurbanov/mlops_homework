@@ -1,0 +1,38 @@
+name: Deploy to EC2 (self-hosted)
+
+on:
+  push:
+    branches: [ main ]
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Show environment
+        run: |
+          whoami
+          hostname
+          docker --version
+          docker compose version
+
+      - name: Stop old stack (ignore if none)
+        run: docker compose down || true
+
+      - name: Build & start
+        run: docker compose up -d --build
+
+      - name: Show running containers
+        run: docker ps
+
+      - name: Tail backend logs (last 100 lines)
+        if: always()
+        run: |
+          BID=$(docker ps --filter "name=backend" --format "{{.ID}}" | head -n1)
+          if [ -n "$BID" ]; then docker logs --tail=100 $BID || true; fi
