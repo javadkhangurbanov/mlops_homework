@@ -50,7 +50,11 @@ class FeatureBuilder(BaseEstimator, TransformerMixin):
         # Device manufacturer rare groups
         # Normalize text case/spaces to reduce duplicates
         dev_man_clean = (
-            df["dev_man"].astype(str).str.strip().str.replace(r"\s+", " ", regex=True).str.upper()
+            df["dev_man"]
+            .astype(str)
+            .str.strip()
+            .str.replace(r"\s+", " ", regex=True)
+            .str.upper()
         )
         dm_freq = dev_man_clean.value_counts(normalize=True)
         self._rare_dev_man_ = set(dm_freq[dm_freq < self.dev_man_min_freq].index)
@@ -73,13 +77,17 @@ class FeatureBuilder(BaseEstimator, TransformerMixin):
             lambda x: (
                 np.nan
                 if pd.isna(x)
-                else (int(x) if int(x) <= self.cap_dev_num_at - 1 else self.cap_dev_num_at)
+                else (
+                    int(x) if int(x) <= self.cap_dev_num_at - 1 else self.cap_dev_num_at
+                )
             )
         )
 
         # --- dual_smart_combo ('0_0','0_1','1_0','1_1') ---
         # Coerce to int first to avoid 'True'/'False' strings
-        df["is_dualsim"] = pd.to_numeric(df["is_dualsim"], errors="coerce").fillna(0).astype(int)
+        df["is_dualsim"] = (
+            pd.to_numeric(df["is_dualsim"], errors="coerce").fillna(0).astype(int)
+        )
         df["is_smartphone"] = (
             pd.to_numeric(df["is_smartphone"], errors="coerce").fillna(0).astype(int)
         )
@@ -97,7 +105,11 @@ class FeatureBuilder(BaseEstimator, TransformerMixin):
 
         # --- dev_man_grouped (normalize casing first to match fit) ---
         dev_man_clean = (
-            df["dev_man"].astype(str).str.strip().str.replace(r"\s+", " ", regex=True).str.upper()
+            df["dev_man"]
+            .astype(str)
+            .str.strip()
+            .str.replace(r"\s+", " ", regex=True)
+            .str.upper()
         )
         df["dev_man_grouped"] = dev_man_clean.where(
             ~dev_man_clean.isin(self._rare_dev_man_), "Other"
@@ -138,7 +150,9 @@ def make_preprocessor():
 
     # === pipelines ===
     numeric_cont_pipeline = Pipeline([("imputer", SimpleImputer(strategy="mean"))])
-    numeric_disc_pipeline = Pipeline([("imputer", SimpleImputer(strategy="most_frequent"))])
+    numeric_disc_pipeline = Pipeline(
+        [("imputer", SimpleImputer(strategy="most_frequent"))]
+    )
 
     low_cardinal_cat_pipeline = Pipeline(
         [

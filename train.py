@@ -4,8 +4,11 @@ import os
 import joblib
 import numpy as np
 from sklearn.metrics import average_precision_score, roc_auc_score
-from sklearn.model_selection import (RandomizedSearchCV, StratifiedKFold,
-                                     train_test_split)
+from sklearn.model_selection import (
+    RandomizedSearchCV,
+    StratifiedKFold,
+    train_test_split,
+)
 from sklearn.pipeline import Pipeline
 
 from src.features import make_preprocessor
@@ -23,7 +26,9 @@ def main():
     os.makedirs(args.outdir, exist_ok=True)
 
     X, y = load_xy(args.data)
-    X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
+    X_tr, X_te, y_tr, y_te = train_test_split(
+        X, y, test_size=0.2, stratify=y, random_state=42
+    )
 
     pos = int(y_tr.sum())
     neg = int(len(y_tr) - pos)
@@ -66,7 +71,8 @@ def main():
         "holdout_roc_auc": float(roc_auc_score(y_te, proba)),
         "holdout_pr_auc": float(average_precision_score(y_te, proba)),
         "best_params": {
-            k: (float(v) if hasattr(v, "__float__") else v) for k, v in search.best_params_.items()
+            k: (float(v) if hasattr(v, "__float__") else v)
+            for k, v in search.best_params_.items()
         },
     }
 

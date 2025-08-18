@@ -13,9 +13,12 @@ app = FastAPI(title="Telecom Multisimmer API", version="1.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], allow_credentials=True,
-    allow_methods=["*"], allow_headers=["*"],
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
+
 
 @app.on_event("startup")
 def _load_model():
@@ -23,9 +26,11 @@ def _load_model():
         raise RuntimeError(f"Model not found at {MODEL_PATH}")
     app.state.model = joblib.load(MODEL_PATH)
 
+
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
 
 @app.post("/predict", response_model=PredictResponse)
 def predict(req: PredictRequest):

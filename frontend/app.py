@@ -20,7 +20,7 @@ with st.form("prediction_form"):
     is_smartphone = st.selectbox("Smartphone", [0, 1])
     is_featurephone = st.selectbox("Featurephone", [0, 1])
     simcard_type = st.selectbox("SIM Type", ["2G", "3G", "4G", "5G"])
-    
+
     submitted = st.form_submit_button("Predict")
 
 if submitted:
@@ -39,7 +39,7 @@ if submitted:
                 "is_smartphone": is_smartphone,
                 "is_featurephone": is_featurephone,
                 "simcard_type": simcard_type,
-                "region": region
+                "region": region,
             }
         ]
     }
@@ -48,6 +48,6 @@ if submitted:
     backend_url = os.getenv("BACKEND_URL", "http://127.0.0.1:8000")
     response = requests.post(f"{backend_url}/predict", json=payload)
     result = response.json()
-    
+
     st.write("**Prediction Result:**")
     st.json(result)

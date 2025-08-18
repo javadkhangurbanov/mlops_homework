@@ -18,8 +18,10 @@ class TelecomRecord(BaseModel):
     simcard_type: Optional[str] = None
     region: Optional[str] = None
 
+
 class PredictRequest(BaseModel):
     records: List[TelecomRecord]
+
 
 class PredictResponse(BaseModel):
     probabilities: List[float]
