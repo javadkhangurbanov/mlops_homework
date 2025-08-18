@@ -1,8 +1,10 @@
 import os
+
 import joblib
 import pandas as pd
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+
 from .schemas import PredictRequest, PredictResponse
 
 MODEL_PATH = os.getenv("MODEL_PATH", "models/model.joblib")

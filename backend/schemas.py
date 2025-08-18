@@ -1,5 +1,7 @@
 from typing import List, Optional
+
 from pydantic import BaseModel, Field
+
 
 class TelecomRecord(BaseModel):
     trf: Optional[str] = None

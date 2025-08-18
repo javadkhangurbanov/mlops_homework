@@ -4,7 +4,8 @@ import os
 import joblib
 import numpy as np
 from sklearn.metrics import average_precision_score, roc_auc_score
-from sklearn.model_selection import RandomizedSearchCV, StratifiedKFold, train_test_split
+from sklearn.model_selection import (RandomizedSearchCV, StratifiedKFold,
+                                     train_test_split)
 from sklearn.pipeline import Pipeline
 
 from src.features import make_preprocessor
