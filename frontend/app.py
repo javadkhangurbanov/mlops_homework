@@ -3,7 +3,7 @@ import os
 import requests
 import streamlit as st
 
-st.title("Churn Prediction Demo")
+st.title("Multisimmer Prediction Model")
 
 # Form
 with st.form("prediction_form"):
