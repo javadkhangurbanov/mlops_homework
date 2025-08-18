@@ -1,0 +1,10 @@
+# ruff.toml
+line-length = 100
+target-version = "py311"
+
+[lint]
+select = ["E", "F", "W", "I"]   # pycodestyle/pyflakes/warnings/isort
+ignore = []
+
+[format]
+quote-style = "double"
